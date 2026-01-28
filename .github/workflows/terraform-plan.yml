@@ -1,0 +1,101 @@
+name: Terraform Plan Validation
+
+
+
+on:
+
+  push:
+
+    branches:
+
+      - main
+
+      - develop
+
+
+
+jobs:
+
+  terraform-plan:
+
+    runs-on: ubuntu-latest
+
+
+
+    steps:
+
+      # Step 1: Checkout repo
+
+      - name: Checkout code
+
+        uses: actions/checkout@v3
+
+
+
+      # Step 2: Setup Terraform
+
+      - name: Setup Terraform
+
+        uses: hashicorp/setup-terraform@v2
+
+        with:
+
+          terraform_version: 1.6.6
+
+
+
+      # Step 3: Configure AWS Credentials
+
+      - name: Configure AWS Credentials
+
+        uses: aws-actions/configure-aws-credentials@v4
+
+        with:
+
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+          aws-region: ap-south-1
+
+
+
+      # Step 4: Terraform Init
+
+      - name: Terraform Init
+
+        run: terraform init
+
+
+
+      # Step 5: Terraform Validate
+
+      - name: Terraform Validate
+
+        run: terraform validate
+
+
+
+      # Step 6: Terraform Plan
+
+      - name: Terraform Plan
+
+        run: terraform plan -out=tfplan.binary
+
+
+
+      # Step 7: Upload Plan Artifact
+
+      - name: Upload Plan Artifact
+
+        uses: actions/upload-artifact@v3
+
+        with:
+
+          name: terraform-plan
+
+          path: tfplan.binary
+
+
+
+
