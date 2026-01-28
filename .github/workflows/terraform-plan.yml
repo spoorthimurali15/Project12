@@ -8,7 +8,9 @@ on:
 
     branches:
 
-      - '*'
+      - main
+
+      - develop
 
 
 
@@ -26,7 +28,7 @@ jobs:
 
       - name: Checkout code
 
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
 
 
@@ -82,7 +84,7 @@ jobs:
 
 
 
-      # Step 7: Upload Plan Artifact
+      # Step 7: Upload Binary Plan Artifact
 
       - name: Upload Plan Artifact
 
@@ -95,5 +97,25 @@ jobs:
           path: tfplan.binary
 
 
+
+      # Step 8: Terraform Show (Human-readable plan)
+
+      - name: Terraform Show (Human-readable plan)
+
+        run: terraform show -no-color tfplan.binary > tfplan.txt
+
+
+
+      # Step 9: Upload Human-readable Plan
+
+      - name: Upload Human-readable Plan
+
+        uses: actions/upload-artifact@v4
+
+        with:
+
+          name: terraform-plan-text
+
+          path: tfplan.txt
 
 
