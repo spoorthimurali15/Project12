@@ -2,9 +2,9 @@ variable "instance_type" {
 
   description = "EC2 instance type"
 
-  type        = string
+  type = string
 
-  default     = "t3.micro"
+  default = "t3.micro"
 
 }
 
